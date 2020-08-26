@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}留言管理{% endblock %}
+{% block css %}{% endblock %}
+
+{% block breadcrumb %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        留言管理
+        <small>message management</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 留言管理</a></li>
+        <li class="active">留言管理</li>
+      </ol>
+    </section>
+{% endblock %}
+
+
+{% block content %}
+
+
+     <!-- Main content -->
+    <section class="content">
+{#        <table border="1">#}
+{#            {% for i in data  %}#}
+{#                <tr>#}
+{#                    <td>{{ i.HostName }}</td>#}
+{#                    <td>{{ i.IP }}</td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        </table>#}
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="span12">
+                        <form class="form-search" action="{% url 'managent:companyFlow' 1 %}" method="GET">
+{#                            {% csrf_token %}#}
+                            <div class="col-xs-3">
+                               <input type="text" class="form-control" placeholder="请输入搜索内容" value="{{ query }}" name="query">
+                            </div>
+{#                            <div class="col-xs-3">#}
+{#                               <input type="text" class="form-control" placeholder="联系方式" name="phone">#}
+{#                            </div>#}
+                            <button type="submit" class="btn btn-primary float-right">查询</button>
+                            &nbsp;&nbsp;
+{#                            <input id="fat-btn" class="btn btn-primary" data-loading-text="Loading..."#}
+{#                                type="reset">#}
+
+                        </form>
+                    </div>
+                    <br /><br />
+{#                    <br />#}
+{#                    <div>#}
+{#                        <a class="label label-success" href="/pship_add/">新增</a>#}
+{#                    </div>#}
+                    <div class="box-body">
+
+
+                        <table id="assets_table" class="table table-bordered table-striped">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="box box-primary">
+                                        <div class="box-body table-responsive no-padding">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="text-center">姓名</th>
+                                                        <th class="text-center">联系方式</th>
+                                                        <th class="text-center">留言</th>
+                                                        <th class="text-center">留言时间</th>
+                                                        <th class="text-center">操作</th>
+                                                    </tr>
+                                                    {% if page %}
+                                                        {% for message in page %}
+                                                            <tr>
+
+                                                                <td class="text-center">{{ message.name }}</td>
+                                                                <td class="text-center">{{ message.tellphone }}</td>
+                                                                <td class="text-center">{{ message.mess }}</td>
+                                                                <td class="text-center">{{ message.c_time }}</td>
+                                                                <td class="text-center">
+{#                                                                    <a class="label label-default" href="/pship_edit/{{ message.id }}">详情</a>#}
+                                                                    &nbsp;
+                                                                    <a class="label label-warning" href="/managent/message_del/{{ message.id }}">删除</a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr>
+                                                            <th>暂无数据</th>
+
+                                                        </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+{#                                            {{ page }}#}
+
+                                    {# 分页标签的HTML代码 #}
+                                        <div class=" clearfix">
+                                            <ul class="pagination pagination-sm no-margin pull-right">
+                                                {% if page.has_previous %}
+                                                {# 得到上一页的页码编号 #}
+                                                  <a href="/managent/companyFlow_sel/1/?page={{ page.previous_page_number }}">上一页</a>
+                                                {% else %}
+                                                <a href="#">上一页</a>
+                                                {% endif %}
+                                                {# 在页面范围内循环选择一个页面号码 #}
+                                                {% for p in page.paginator.page_range %}
+                                                {# 如果页面编号等于当前页码序号 #}
+                                                    {%if pindex == page.number%}
+                                                         {# 否则跳转到页码相对应的页面 #}
+                                                        <a href="/managent/companyFlow_sel/1/?page={{ p }}">{{ p }}</a>
+                                                    {% else %}
+                                                        <a href="/managent/companyFlow_sel/1/?page={{ p }}&query={{ query }}">{{ p }}</a>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if page.has_next %}
+                                                  <a href="/managent/companyFlow_sel/1/?page={{ page.next_page_number }}">下一页</a>
+                                                {% else %}
+                                                <a href="#">下一页</a>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+
+{#                                    这是分页查询的方法，代码编号001#}
+{#                                        <div style="position: absolute;top: 30%;left: 44%">#}
+{#                                            <nav aria-label="Page navigation">#}
+{#                                                <div class="pagination">#}
+{#                                                    <ul class="pagination" >#}
+{#                                                    {% if page.has_previous %}#}
+{#                                                        <li><a href="/curd/{{page.previous_page_number}}?query={{query}}"   aria-label="Previous">#}
+{#                                                            <span aria-hidden="true">&laquo;</span></a></li>#}
+{#                                                    {% endif %}#}
+{##}
+{#                                                    {% for num in page.paginator.page_range%}#}
+{#                                                        {%if pindex == page.number%}#}
+{#                                                            <li><a href="">{{ num }}</a></li>#}
+{#                                                        {%else%}#}
+{#                                                            <li><a href="/curd/{{num}}?query={{query}}">{{ num }}</a></li>#}
+{#                                                        {%endif%}#}
+{#                                                     {% endfor %}#}
+{##}
+{#                                                     {% if page.has_next %}#}
+{#                                                         <li><a href="{% url 'person:curdindex' page.next_page_number%}?query={{query}}" aria-label="Next">#}
+{#                                                              <span aria-hidden="true">&raquo;</span></a></li>#}
+{#                                                      {% endif %}#}
+{#                                                    </ul>#}
+{#                                                </div>#}
+{#                                            </nav>#}
+{#                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
