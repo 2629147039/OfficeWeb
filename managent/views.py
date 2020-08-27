@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, render_to_response, redirect
+from django.shortcuts import render, HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.forms import ModelForm
 from django.contrib import messages
